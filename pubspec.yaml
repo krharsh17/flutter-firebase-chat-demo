@@ -29,8 +29,8 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  sendbird_sdk: ^3.0.11
-  dash_chat: ^1.1.15
+  sendbird_sdk: ^3.2.11
+  dash_chat_2: ^0.0.17
   firebase_messaging: ^14.3.0
   flutter_local_notifications: ^13.0.0
   firebase_core: ^2.8.0

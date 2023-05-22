@@ -34,7 +34,8 @@ class LoginViewState extends State<LoginView> {
       elevation: 0,
       backgroundColor: Colors.white,
       automaticallyImplyLeading: true,
-      title: const Text('Sendbird Sample', style: TextStyle(color: Colors.black)),
+      title:
+          const Text('Sendbird Sample', style: TextStyle(color: Colors.black)),
       actions: const [],
       centerTitle: true,
     );
@@ -54,7 +55,7 @@ class LoginViewState extends State<LoginView> {
                 )),
             const SizedBox(height: 20),
             Text('Sendbird Sample',
-                style: Theme.of(context).textTheme.headline6),
+                style: Theme.of(context).textTheme.titleLarge),
             const SizedBox(height: 40),
             TextField(
               controller: _appIdController,
@@ -130,7 +131,8 @@ class LoginViewState extends State<LoginView> {
     }
     return TextButton(
       style: ButtonStyle(
-          backgroundColor: MaterialStateProperty.all<Color>(const Color(0xff742DDD)),
+          backgroundColor:
+              MaterialStateProperty.all<Color>(const Color(0xff742DDD)),
           foregroundColor: MaterialStateProperty.all<Color>(Colors.white)),
       onPressed: () {
         // Login with Sendbird

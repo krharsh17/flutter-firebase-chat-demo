@@ -62,7 +62,8 @@ class CreateChannelViewState extends State<CreateChannelView> {
       automaticallyImplyLeading: true,
       backgroundColor: Colors.white,
       centerTitle: true,
-      leading: BackButton(color: Theme.of(context).buttonColor),
+      leading:
+          BackButton(color: Theme.of(context).buttonTheme.colorScheme!.primary),
       title: Text(
         'Select members',
         style: TextStyle(color: Colors.black),
@@ -71,7 +72,7 @@ class CreateChannelViewState extends State<CreateChannelView> {
         TextButton(
           style: ButtonStyle(
               foregroundColor: MaterialStateProperty.all<Color>(
-                  Theme.of(context).buttonColor)),
+                  Theme.of(context).buttonTheme.colorScheme!.primary)),
           onPressed: () {
             if (_selectedUsers.toList().length < 1) {
               // Don't create a channel if there isn't another user selected

@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:dash_chat/dash_chat.dart';
+import 'package:dash_chat_2/dash_chat_2.dart';
 import 'package:sendbird_sdk/sendbird_sdk.dart';
 import 'dart:async';
 
 class GroupChannelView extends StatefulWidget {
   final GroupChannel groupChannel;
-  const GroupChannelView({Key? key, required this.groupChannel}) : super(key: key);
+  const GroupChannelView({Key? key, required this.groupChannel})
+      : super(key: key);
 
   @override
   GroupChannelViewState createState() => GroupChannelViewState();
@@ -31,6 +32,7 @@ class GroupChannelViewState extends State<GroupChannelView>
   onMessageReceived(channel, message) {
     setState(() {
       _messages.add(message);
+      _messages.sort(((a, b) => b.createdAt.compareTo(a.createdAt)));
     });
   }
 
@@ -39,6 +41,7 @@ class GroupChannelViewState extends State<GroupChannelView>
       List<BaseMessage> messages = await channel.getMessagesByTimestamp(
           DateTime.now().millisecondsSinceEpoch * 1000, MessageListParams());
       setState(() {
+        messages.sort(((a, b) => b.createdAt.compareTo(a.createdAt)));
         _messages = messages;
       });
     } catch (e) {
@@ -59,7 +62,8 @@ class GroupChannelViewState extends State<GroupChannelView>
       automaticallyImplyLeading: true,
       backgroundColor: Colors.white,
       centerTitle: false,
-      leading: BackButton(color: Theme.of(context).buttonColor),
+      leading:
+          BackButton(color: Theme.of(context).buttonTheme.colorScheme!.primary),
       title: Container(
         width: 250,
         child: Text(
@@ -76,31 +80,27 @@ class GroupChannelViewState extends State<GroupChannelView>
       // A little breathing room for devices with no home button.
       padding: const EdgeInsets.fromLTRB(8, 8, 8, 40),
       child: DashChat(
-        dateFormat: DateFormat("E, MMM d"),
-        timeFormat: DateFormat.jm(),
-        showUserAvatar: true,
         key: Key(widget.groupChannel.channelUrl),
         onSend: (ChatMessage message) async {
           var sentMessage =
-              widget.groupChannel.sendUserMessageWithText(message.text!);
+              widget.groupChannel.sendUserMessageWithText(message.text);
           setState(() {
             _messages.add(sentMessage);
+            _messages.sort(((a, b) => b.createdAt.compareTo(a.createdAt)));
           });
         },
-        sendOnEnter: true,
-        textInputAction: TextInputAction.send,
-        user: user,
+        inputOptions: const InputOptions(
+          sendOnEnter: true,
+          textInputAction: TextInputAction.send,
+          inputDecoration:
+              InputDecoration.collapsed(hintText: "Type a message here..."),
+        ),
+        messageOptions: const MessageOptions(
+          showCurrentUserAvatar: false,
+          showOtherUsersAvatar: true,
+        ),
+        currentUser: user,
         messages: asDashChatMessages(_messages),
-        inputDecoration:
-            const InputDecoration.collapsed(hintText: "Type a message here..."),
-        messageDecorationBuilder: (ChatMessage msg, bool? isUser) {
-          return BoxDecoration(
-            borderRadius: const BorderRadius.all(Radius.circular(20.0)),
-            color: isUser!
-                ? Theme.of(context).primaryColor
-                : Colors.grey[200], // example
-          );
-        },
       ),
     );
   }
@@ -129,9 +129,9 @@ class GroupChannelViewState extends State<GroupChannelView>
 
   ChatUser asDashChatUser(User user) {
     return ChatUser(
-      name: user.nickname,
-      uid: user.userId,
-      avatar: user.profileUrl,
+      firstName: user.nickname,
+      id: user.userId,
+      profileImage: user.profileUrl,
     );
   }
 }
